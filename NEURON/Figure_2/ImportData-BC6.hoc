@@ -1,0 +1,46 @@
+// both functions load_curr() and load_exp():
+// first parameter is the file to import
+// second parameter is the time until the file should be read (tstop usually)
+obfunc load_curr() {local i, ii localobj stimVec
+	ropen($s1)
+	for(ii=0;ii<1+3600;ii+=1) {fscan()}
+	stimVec=new Vector($2/Dt_exp)
+	for i=0, $2/Dt_exp-1 {
+		stimVec.x[i]=fscan()/1000
+	}
+	ropen()
+	return stimVec
+}
+
+obfunc load_exp() {local i,j,jj localobj yData
+	ropen($s1)
+	for(jj=0;jj<1+3600;jj+=1) {fscan()}
+	yData = new Vector($2/Dt_exp)
+	for i=0, $2/Dt_exp-1 {
+		yData.x[i]=fscan()
+	}
+	ropen()	// closes the input file
+	return yData
+}
+
+objref ExpData, shiftExpData
+ExpData = new List()
+shiftExpData = new List()
+
+// load experimental data
+objref xData_sh, xData_lo
+xData_sh = new Vector(tstop_sh/Dt_exp)
+xData_lo = new Vector(tstop_lo/Dt_exp)
+xData_sh.indgen(Dt_exp)
+xData_lo.indgen(Dt_exp)
+
+shiftExpData.append(load_exp("ExpTrace-SomaShort.txt",tstop_sh))
+shiftExpData.append(load_exp("ExpTrace-DendShort.txt",tstop_sh))
+shiftExpData.append(load_exp("ExpTrace-SomaLong.txt",tstop_lo))
+shiftExpData.append(load_exp("ExpTrace-DendLong.txt",tstop_lo))
+
+// load of current data
+objref CurrData //, timeVec
+CurrData = new List()
+CurrData.append(load_curr("InpTrace-SomaShort.txt",tstop_sh))
+CurrData.append(load_curr("InpTrace-SomaLong.txt",tstop_lo))

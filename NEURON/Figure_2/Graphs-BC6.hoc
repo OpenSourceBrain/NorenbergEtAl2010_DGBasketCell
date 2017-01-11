@@ -1,0 +1,30 @@
+//generate plots
+objref gcurr_sh, gcurr_lo, g_Sosh, g_Solo, g_Desh, g_Delo
+g_Desh=new Graph(0)
+g_Desh.size(0,tstop_sh,0,2)
+g_Desh.view(0,0,tstop_sh,2,300,500,300.6,150)
+g_Delo=new Graph(0)
+g_Delo.size(0,tstop_lo,-0.01,3.5)
+g_Delo.view(0,-0.01,tstop_lo,3.51,700,500,300.6,150)
+g_Sosh=new Graph(0)
+g_Sosh.size(0,tstop_sh,0,2)
+g_Sosh.view(0,0,tstop_sh,2,300,300,300.6,150)
+g_Solo=new Graph(0)
+g_Solo.size(0,tstop_lo,-0.01,3.5)
+g_Solo.view(0,-0.01,tstop_lo,3.51,700,300,300.6,150)
+gcurr_sh=new Graph(0)
+gcurr_sh.size(0,tstop_sh,-0.1,0.5)
+gcurr_sh.view(0,-0.1,tstop_sh,0.6,300,90,300.6,150)
+gcurr_lo=new Graph(0)
+gcurr_lo.size(0,tstop_lo,-0.01,0.05)
+gcurr_lo.view(0,-0.01,tstop_lo,0.06,700,90,300.6,150)
+
+CurrData.o(0).plot(gcurr_sh,xData_sh)	// plots short current trace to soma
+CurrData.o(1).mul(-1).plot(gcurr_lo,xData_lo)	// plots long current trace to soma
+
+
+shiftExpData.o(0).plot(g_Sosh,xData_sh,1,1)	// plots ExpTrace-SomaShort
+shiftExpData.o(1).plot(g_Desh,xData_sh,3,1)	// plots ExpTrace-DendShort
+shiftExpData.o(2).mul(-1).plot(g_Solo,xData_lo,1,1)	// plots ExpTrace-SomaLong
+shiftExpData.o(3).mul(-1).plot(g_Delo,xData_lo,3,1)	// plots ExpTrace-DendLong
+

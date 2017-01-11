@@ -1,0 +1,231 @@
+// runs simulation to reproduce figure 2 of the paper
+
+//Nörenberg A, Hu H, Vida I, Bartos M, Jonas P. (2010) Distinct nonuniform cable properties optimize rapid and efficient activation of fast-spiking GABAergic interneurons. PNAS 107(2):894-9.
+
+//Please, send bug reports and comments to
+//anja.matthiae at charite.de or anja at matthiae.eu
+
+load_file("nrngui.hoc")
+
+// INITIAL PARAMETERS -------------------------------------------------------
+Dt_exp = 0.05		// experimental sampling rate
+dt_sh = 0.01		// sampling rate for simulation of short voltage responses
+dt_lo = 0.1			// sampling rate for simulation of long voltage responses
+v_init = 0
+tstop_sh = 120 // 30 //
+tstop_lo = 950 // 200 //
+cutoff = 10 		// cutoff frequency in kHz for filtering of simulated traces
+chi_startRec = 20.0	// start of calculating chi-square for recording site in ms
+chi_startInjSh = 22	// start of calculating chi-square for injecting site (excluding stimulation artifact)
+chi_startInjLo = 522// same for long pulses
+chi_endInjLo = 700
+w_start = 20.75		// start for weight on initial decay in ms after start of exp. trace
+w_end = 25.75		// end for weight on initial decay in ms after start of exp. trace
+weight_sh = 10
+weight_lo = (((2 * tstop_sh) - chi_startInjSh - chi_startRec + (w_end - w_start)*(weight_sh-1)) * dt_lo) / (((2 * tstop_lo) - chi_startInjLo - chi_startRec) * Dt_exp)
+print "weight_lo: ", weight_lo
+
+// PARAMETERS FOR PIPETTES --------------------------------------------------
+pipPres = 0			// 0 if pipettes are included, 1 if pipettes are excluded
+Cpip = 2.006871
+if (pipPres == 1) {Cpip = 0}
+Rser1 = 17 			// in MegaOhm; somatic electrode
+Rser2 = 50 			// in MegaOhm, recording electrode
+PI=3.1415926535897932384626433832795
+
+// DEFINITION OF MODELTYPE --------------------------------------------------
+modeltype = 2		// 0 for uniform model, 1 for NU1, 2 for NU2
+axialresist = 258.564386	// axial resistance in Ohm cm
+membcapacit = 0.96858		// membrane capacitance in µF cm-2
+membresis_dist = 15490.215663 	// membrane resistance for distal dendrites in Ohm cm2
+membresis_prox = 10723.125012 	// membrane resistance for proximal dendrites in Ohm cm2
+membresis_axon = 269769.046043	// membrane resistance for axon in Ohm cm2
+border = 120 		// / border between proximal and distal dendrites
+
+load_file("morph-BC6.hoc")
+load_file("specifiy-BC6.hoc")
+if (pipPres == 0) load_file("pipettes.hoc")
+load_file("ImportData-BC6.hoc")
+load_file("PointProc-BC6.hoc")
+load_file("Graphs-BC6.hoc") // needs to be called after Import4.hoc
+
+// function is used for filtering simulated data similar to filtered experimental data --------------------------------------------------
+obfunc apply_filter() { local n, ii, i, s, fc localobj v1, filt_kernel, filt_v
+	v1 = new Vector($o1.size())
+	for ii=0, $o1.size()-1 {
+		v1.x[ii] = $o1.x[ii]
+	}
+	n = v1.size()
+	// Gaussian filter kernel from Colquhoun and Sigworth (1995), Section 2.2.1, Eq. 6
+	filt_kernel = new Vector(n)
+	fc = cutoff
+	for i = 0, filt_kernel.size()-1 {
+		filt_kernel.x[i] = 3.011 * 5 * exp(-(5.336*fc*i*dt))
+	}
+	// Put the kernel in "wrap-around" order (see Numerical Recipes in C 13.1)
+	for i = int(filt_kernel.size()/2), filt_kernel.size()-1 {
+		filt_kernel.x[i] = filt_kernel.x[filt_kernel.size() - i]
+	}
+	// Normalize the kernel
+	s = filt_kernel.sum()
+	filt_kernel.div(s)
+	filt_v = new Vector()
+	filt_v = filt_v.convlv(v1, filt_kernel)
+	for i = 0, v1.size()-1 {
+		v1.x[i] = filt_v.x[i]
+	}
+	return v1
+}
+
+// CALCULATION OF CHI-SQUARE ----------------------------------------
+// inputs to function ChiSquare():
+// (1) weight of chisquare
+// (2) start and (3) end point of chisquare calculation
+// (4) experimental vector for short or simulated vector of long pulses
+// (5) simulated vector for short or experimental vector of long pulses
+func ChiSquare() {local m, mm, chisq, weight
+	chisq = 0
+	weight = $1
+	for m=$2+1, $3-1 {
+		chisq += (($o4.x[m] - $o5.x[m*ratio])*($o4.x[m] - $o5.x[m*ratio]))*weight
+	}
+	return chisq
+}
+
+// PROCEDURES FOR SIMULATING SHORT AND LONG RESPONSES -----------------
+objref somaVec_sh, soma_sh, dendVec_sh, somaVec_lo, soma_lo, dendVec_lo, curr_sh, curr_lo
+objref filtSoma_sh, filtDend_sh, filtSoma_lo, filtDend_lo
+proc simulation_long() {local i
+	dt = dt_lo	// dt must not be smaller than Dt_exp due to calculation of chi-square
+	steps_per_ms = 1/dt
+	tstop = tstop_lo
+	stim_points = tstop/Dt_exp
+	ratio = dt/Dt_exp
+
+	//ins_IC(somaIC,20.06,500,-0.04)
+	ins_IC(somaIC,0,tstop,1e9)
+	CurrData.o(1).play(&somaIC.amp,xData_lo,1)
+
+	objref somaVec_lo, dendVec_lo, soma_lo
+	soma_lo = new Vector()
+	somaVec_lo = new Vector()
+	dendVec_lo = new Vector()
+	curr_lo = new Vector()
+	if (pipPres == 0 && Cpip == 0) {
+		somaVec_lo.record(&soma.v(0.5))
+		dendVec_lo.record(&apic[291].v(8/9))
+	}
+	if (pipPres == 1 || Cpip > 0) {
+		somaVec_lo.record(&pip1[n_pip-1].v(1.0))
+		dendVec_lo.record(&pip2[n_pip-1].v(1.0))
+	}
+	soma_lo.record(&soma.v(0.5))
+	curr_lo.record(&somaIC.i)
+	init()
+	run()
+	//somaVec_lo.plot(g_flo,dt,1,1)
+	//dendVec_lo.plot(g_flo,dt,2,1)
+	curr_lo.plot(gcurr_lo,dt,2,1)
+	//filtering of simulated traces
+	objref filtSoma_lo, filtDend_lo
+	filtSoma_lo = new Vector(somaVec_lo.size())
+	filtDend_lo = new Vector(dendVec_lo.size())
+	filtSoma_lo = apply_filter(somaVec_lo)
+	filtDend_lo = apply_filter(dendVec_lo)
+	filtSoma_lo.plot(g_Solo,dt,4,1)
+	//dendVec_lo.plot(g_flo,dt,9,1)
+	filtDend_lo.plot(g_Delo,dt,4,1)
+}
+
+proc simulation_short() {local i
+	dt = dt_sh	// dt must not be larger than Dt_exp due to calculation of chi-square
+	steps_per_ms = 1/dt
+	tstop = tstop_sh
+	stim_points = tstop/Dt_exp
+	ratio = Dt_exp/dt
+
+	//ins_IC(somaIC,20.05,0.5,0.5)
+	ins_IC(somaIC,0,tstop,1e9)
+	CurrData.o(0).play(&somaIC.amp,xData_sh,1)
+
+	objref somaVec_sh, dendVec_sh, soma_sh
+	soma_sh = new Vector()
+	somaVec_sh = new Vector()
+	dendVec_sh = new Vector()
+	curr_sh = new Vector()
+	if (pipPres == 0 && Cpip == 0) {
+		somaVec_sh.record(&soma.v(0.5))
+		dendVec_sh.record(&apic[291].v(8/9))
+	}
+	if (pipPres == 1 || Cpip > 0) {
+		somaVec_sh.record(&pip1[n_pip-1].v(1.0))
+		dendVec_sh.record(&pip2[n_pip-1].v(1.0))
+	}
+	soma_sh.record(&soma.v(0.5))
+	curr_sh.record(&somaIC.i)
+	init()
+	run()
+	//somaVec_sh.plot(g_fsh,dt,1,1)
+	//dendVec_sh.plot(g_fsh,dt,2,1)
+	curr_sh.plot(gcurr_sh,dt,2,1)
+	//filtering of simulated traces
+	objref filtSoma_sh, filtDend_sh
+	filtSoma_sh = new Vector(somaVec_sh.size())
+	filtDend_sh = new Vector(dendVec_sh.size())
+	filtSoma_sh = apply_filter(somaVec_sh)
+	filtDend_sh = apply_filter(dendVec_sh)
+	filtSoma_sh.plot(g_Sosh,dt,4,1)
+	filtDend_sh.plot(g_Desh,dt,4,1)
+}
+
+func errfun() {local sum, chi_inj_sh, chi_rec_sh, chi_inj_lo, chi_rec_lo, i localobj parReal, writeParm
+	chi_inj_sh = 0		// ChiSquare for short somatic responses
+	chi_rec_sh = 0		// ChiSquare for short dendritic responses
+	chi_inj_lo = 0		// ChiSquare for long somatic responses
+	chi_rec_lo = 0		// ChiSquare for long dendritic responses
+	dis = 0				// initializing variable for checking the distance of x
+	sum = 0				// initalizing sum of ChiSquares
+	biophys(membresis_prox,axialresist,membcapacit)
+	if (pipPres == 0 && Cpip > 0) {
+		forsec "pip" {		// defining pipette capacitance
+			pipRef=new SectionRef()
+			adjustPipCap(pipRef,Cpip)
+		}
+	}
+	if (modeltype > 0) {
+		forsec axonal {
+			g_pas = 1/membresis_axon
+		}
+	}
+	if (modeltype > 1) {
+		soma distance(0,0.5)
+		forsec somadend {
+			for (x) {		// for (x,0) does the same loop but a priori excludes 0s and 1s --> check with documentation!
+				if (x != 0 && x != 1) {
+					dis = distance(x)
+					if (dis <= border) { g_pas(x) = 1 / membresis_prox }
+					if (dis > border) { g_pas(x) = 1 / membresis_dist }
+				}
+			}
+		}
+	}
+
+	simulation_short()
+// chisquare for injecting (somatic) site
+	chi_inj_sh += ChiSquare(1,chi_startInjSh/Dt_exp,tstop/Dt_exp,shiftExpData.o(0),filtSoma_sh)
+// chisquare for recording (dendritic) site
+	chi_rec_sh += ChiSquare(1,chi_startRec/Dt_exp,w_start/Dt_exp,shiftExpData.o(1),filtDend_sh)
+	chi_rec_sh += ChiSquare(weight_sh,w_start/Dt_exp,w_end/Dt_exp,shiftExpData.o(1),filtDend_sh)
+	chi_rec_sh += ChiSquare(1,w_end/Dt_exp,tstop/Dt_exp,shiftExpData.o(1),filtDend_sh)
+
+	simulation_long()
+// chisquare for injecting (somatic) site
+	chi_inj_lo += ChiSquare(weight_lo,chi_startInjLo/dt,tstop/dt,filtSoma_lo,shiftExpData.o(2))
+// chisquare for recording (dendritic) site
+	chi_rec_lo += ChiSquare(weight_lo,chi_startRec/dt,tstop/dt,filtDend_lo,shiftExpData.o(3))
+	sum += (chi_inj_sh + chi_rec_sh + chi_inj_lo + chi_rec_lo)
+
+	return sum
+}
+
+errfun()

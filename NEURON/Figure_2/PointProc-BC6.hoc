@@ -1,0 +1,18 @@
+// point processes for simulation of short and long responses for BC6
+
+objref somaIC, dendIC
+if (pipPres == 0 && Cpip == 0) {
+	soma somaIC = new IClamp(0.5)
+	apic[291] dendIC = new IClamp(8/9)
+}
+
+if (pipPres == 1 || Cpip > 0) {
+	pip1[n_pip-1] somaIC = new IClamp(1.0)
+	pip2[n_pip-1] dendIC = new IClamp(1.0)
+}
+
+proc ins_IC() {
+	$o1.del = $2
+	$o1.dur = $3
+	$o1.amp = $4
+}

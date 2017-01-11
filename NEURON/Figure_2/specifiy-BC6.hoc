@@ -1,0 +1,70 @@
+// specifiy-BC6.hoc
+
+ax=2079 // number of axonal sections
+de=205  // number of dend sections (basal)
+ap=432  // number of apic sections (apical)
+
+objref all, somadend, axonal, apical, basal
+proc secdef() {
+	all = new SectionList()
+		soma all.append()
+		for i=0, ax-1 axon[i] all.append()
+		for i=0, de-1 dend[i] all.append()
+		for i=0, ap-1 apic[i] all.append()
+
+	somadend = new SectionList()
+		soma somadend.append()
+		for i=0, de-1 dend[i] somadend.append()
+		for i=0, ap-1 apic[i] somadend.append()
+
+	axonal = new SectionList()
+	for i=0, ax-1 axon[i] axonal.append()
+
+	apical = new SectionList()
+	for i=0, ap-1 apic[i] apical.append()
+
+	basal = new SectionList()
+	for i=0, de-1 dend[i] basal.append()
+}
+
+topol()
+secdef()
+
+// Segmentation ----------------------------------------------------------
+// The number of segments per section (nseg) was set according to the "d-lambda rule" (see Carnevale and Hines 2006, The NEURON Book, Cambridge Univ Press ). The alternating current length constant at 1 kHz ,lambda(1kHz), was calculated for each section, and nseg was increased until the length of all individual segments was <10% of lambda(1kHz), assuming Rm = 10 kOhm cm2, Cm = 1 µF cm-2, and Ri = 100 Ohm cm. Nseg was constrained to odd numbers;
+strdef NsegFile
+NsegFile="NsegOut-BC6.txt"
+objref AllNseg
+AllNseg=new Vector(1+ax+de+ap)
+ropen(NsegFile)
+
+for(i=0;i<AllNseg.size;i=i+1) {
+	AllNseg.x[i]=fscan()
+}
+
+proc geom_nseg() {
+   soma.nseg = AllNseg.x[0]
+   axon.nseg = AllNseg.x[1]
+   for i=1,ax-1 axon[i].nseg = AllNseg.x[i+1]
+   dend.nseg = AllNseg.x[ax+1]
+   for i=1,de-1 dend[i].nseg = AllNseg.x[i+ax+1]
+   apic.nseg = AllNseg.x[ax+de+1]
+   for i=1,ap-1 apic[i].nseg = AllNseg.x[i+ax+de+1]
+   print "Segmentation defined."
+}
+
+geom_nseg()
+
+//biophysics --------------------------------------------------------
+proc biophys() {
+	forsec all {
+		Ra = $2
+		cm = $3
+		g_pas = 1/$1
+	}
+}
+
+forsec all {
+	insert pas
+	e_pas = v_init
+}

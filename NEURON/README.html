@@ -1,0 +1,47 @@
+<html><pre>
+This code includes detailed passive cable models of six dentate gyrus
+fast-spiking basket cells published in the paper:
+
+Norenberg A, Hu H, Vida I, Bartos M, Jonas P. (2010) Distinct
+nonuniform cable properties optimize rapid and efficient activation of
+fast-spiking GABAergic interneurons. PNAS 107(2):894-9.
+
+Please, send bug reports, questions and comments to Anja Matthia (nee
+Norenberg) anja.matthiae@charite.de or anja@matthiae.eu
+
+This model requires NEURON to be installed which is freely available
+from http://www.neuron.yale.edu.
+
+Usage: Auto-launch from ModelDB or download and extract the
+archive. There are no mod files to compile so double click on
+mosinit.hoc (mswin and mac) in the Figure_2 folder or cd to Figure_2
+and type nrngui mosinit.hoc (linux) which starts run-BC6.hoc
+
+After a short pause you should see graphs which reproduce Fig. 2B, C:
+
+<img src="./screenshot.png" alt="screenshot">
+
+Description of files:
+
+run-BC6.hoc             runs simulation using BC6, reproducing
+			Fig.2B,C of the paper. Needs nrngui.hoc
+morph-BC6.hoc           contains the morphology of BC6
+specify-BC6.hoc         specifies segmentation and section
+			lists. Needs NsegOut-BC6.txt
+pipettes.hoc            specifies pipettes used in the simulation
+Graphs-BC6.hoc          specifies the plots used in the simulation
+PointProc-BC6.hoc       implements point processes in the simulation
+ImportData-BC6.hoc      imports experimental traces:
+ExpTrace-DendLong.txt   dendritic voltage trace for BC6 to long
+                        current injection
+ExpTrace-DendShort.txt  dendritic voltage trace for BC6 to short
+                        current injection
+ExpTrace-SomaLong.txt   somatic voltage trace for BC6 to long current
+                        injection
+ExpTrace-SomaShort.txt  somatic voltage trace for BC6 to short current
+                        injection
+InpTrace-SomaLong.txt   somatic long injection current
+InpTrace-SomaShort.txt  somatic short injection current
+
+++++++++
+</pre></html>
