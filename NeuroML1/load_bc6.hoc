@@ -1,0 +1,4 @@
+load_file("nrngui.hoc")
+
+load_file("../NEURON/Figure_2/morph-BC6.hoc")
+load_file("../NEURON/Figure_2/specifiy-BC6.hoc")

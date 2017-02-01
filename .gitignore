@@ -1,3 +1,7 @@
 /.DS_Store
 /NeuroML2/*.png
 /NeuroML2/*.svg
+/neuroConstruct/NorenbergEtAl2010.ncx.bak
+/neuroConstruct/morphologies/*.bak
+/neuroConstruct/simulations
+/neuroConstruct/generated*
