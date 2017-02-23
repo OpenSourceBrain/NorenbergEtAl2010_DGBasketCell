@@ -1,0 +1,33 @@
+<Lems>
+    
+    <!-- 
+
+        This LEMS file has been automatically generated using PyNeuroML v0.2.6 (libNeuroML v0.2.26)
+
+     -->
+    
+    <!-- Specify which component to run -->
+    <Target component="Test"/>
+
+    <!-- Include core NeuroML2 ComponentType definitions -->
+    <Include file="Cells.xml"/>
+    <Include file="Networks.xml"/>
+    <Include file="Simulation.xml"/>
+    
+    <Include file="BC_StimNetnet.nml"/>
+    <Include file="BC2_pas.cell.nml"/>
+    <Include file="pas.channel.nml"/>
+   
+    <Simulation id="Test" length="400ms" step="0.025ms" target="BC_StimNet" seed="12345">  <!-- Note seed: ensures same random numbers used every run -->
+        
+        <Display id="DispPop__BC" title="Membrane potentials of cells in BC" timeScale="1ms" xmin="-40.0" xmax="440.0" ymin="-90" ymax="50">
+            <Line id="BC[0]: v" quantity="BC/0/BC2_pas/v" scale="1mV" color="#d66f7b" timeScale="1ms"/>
+        </Display>
+        
+        <OutputFile id="Volts_file__BC" fileName="Test.BC.v.dat">
+            <OutputColumn id="v_BC_0_BC2_pas_v" quantity="BC/0/BC2_pas/v"/> 
+        </OutputFile>
+        
+    </Simulation>
+
+</Lems>
