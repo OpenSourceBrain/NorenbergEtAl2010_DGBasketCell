@@ -12,7 +12,7 @@ net_doc = neuroml.NeuroMLDocument(id=net_ref)
 net = neuroml.Network(id=net_ref)
 net_doc.networks.append(net)
 
-cell_id = 'BC2_pas'
+cell_id = 'BC2_na_k'
 
 net_doc.includes.append(neuroml.IncludeType(cell_id+'.cell.nml')) 
 
@@ -28,7 +28,7 @@ net.populations.append(pop)
 stim = neuroml.PulseGenerator(id='stim0',
                              delay='50ms',
                              duration='200ms',
-                             amplitude='1nA')
+                             amplitude='2.5nA')
 
 net_doc.pulse_generators.append(stim)
 
@@ -46,7 +46,7 @@ net.input_lists.append(input_list)
 
 
 
-nml_file = net.id+'net.nml'
+nml_file = net.id+'.net.nml'
 
 writers.NeuroMLWriter.write(net_doc,nml_file)
 

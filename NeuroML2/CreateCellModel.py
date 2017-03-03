@@ -9,12 +9,17 @@ print("Loaded morphology file from: "+fn)
 
 cell = doc.cells[0]
 
-
 channel_densities = []
 
+cd_pas = neuroml.ChannelDensity(id="pas_chan", segment_groups="all", ion="non_specific", ion_channel="pas", erev="-70.0 mV", cond_density="0.021 mS_per_cm2")
+channel_densities.append(cd_pas)
 
-cd = neuroml.ChannelDensity(id="pas_chan", segment_groups="all", ion="non_specific", ion_channel="pas", erev="-70.0 mV", cond_density="0.0001 S_per_cm2")
-channel_densities.append(cd)
+cd_na = neuroml.ChannelDensity(id="na_chan", segment_groups="all", ion="na", ion_channel="Na_BC", erev="55 mV", cond_density="50 mS_per_cm2")
+channel_densities.append(cd_na)
+
+cd_k = neuroml.ChannelDensity(id="k_chan", segment_groups="all", ion="k", ion_channel="K_BC", erev="-90 mV", cond_density="30 mS_per_cm2")
+channel_densities.append(cd_k)
+
 
 specific_capacitances = []
 
@@ -43,11 +48,13 @@ bp = neuroml.BiophysicalProperties(id="biophys",
                                    
 cell.biophysical_properties = bp
 
-cell.id = 'BC2_pas'
+cell.id = 'BC2_na_k'
 
 nml_doc2 = neuroml.NeuroMLDocument(id=cell.id)
 
 nml_doc2.includes.append(neuroml.IncludeType('pas.channel.nml')) 
+nml_doc2.includes.append(neuroml.IncludeType('channelConvert/Na_BC.channel.nml')) 
+nml_doc2.includes.append(neuroml.IncludeType('channelConvert/K_BC.channel.nml')) 
 nml_doc2.cells.append(cell)
 
 nml_file = cell.id+'.cell.nml'
