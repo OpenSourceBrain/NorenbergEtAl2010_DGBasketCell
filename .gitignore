@@ -10,4 +10,6 @@
 /NeuroML2/*.dat
 /NeuroML2/*.mod
 /NeuroML2/x86_64
-
+/NeuroML2/channelConvert/x86_64
+/NeuroML2/channelConvert/*.dat
+/NeuroML2/channelConvert/LEMS_Test_*.xml
