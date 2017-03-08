@@ -28,7 +28,7 @@ net.populations.append(pop)
 stim = neuroml.PulseGenerator(id='stim0',
                              delay='50ms',
                              duration='200ms',
-                             amplitude='2.5nA')
+                             amplitude='0.5nA')
 
 net_doc.pulse_generators.append(stim)
 
