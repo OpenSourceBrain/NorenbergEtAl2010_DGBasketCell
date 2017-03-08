@@ -18,11 +18,11 @@
                 
 
         <gate id="m" type="gateHHInstantaneous" instances="3">
-            <steadyState type="HHSigmoidVariable" rate="1" scale="4.6mV" midpoint="-52.6mV"/>
+            <steadyState type="HHSigmoidVariable" rate="1" scale="10mV" midpoint="-37mV"/>
         </gate>
 
         <gate id="h" type="gateHHrates" instances="1">
-            <q10Settings type="q10ExpTemp" q10Factor="3" experimentalTemp="20 degC"/>
+            <q10Settings type="q10ExpTemp" q10Factor="3" experimentalTemp="6.3 degC"/>
             <forwardRate type="HHExpRate" rate="0.35per_ms" scale="-20mV" midpoint="-58mV"/>
             <reverseRate type="HHSigmoidRate" rate="5per_ms" scale="10mV" midpoint="-28mV"/>
         </gate>
