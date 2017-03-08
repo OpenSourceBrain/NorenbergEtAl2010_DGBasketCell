@@ -23,21 +23,11 @@
 
         <gate id="h" type="gateHHrates" instances="1">
             <q10Settings type="q10ExpTemp" q10Factor="3" experimentalTemp="20 degC"/>
-            <forwardRate type="HHExpRate" rate="0.21per_ms" scale="-3.333mV" midpoint="-50mV"/>
-            <reverseRate type="Na_BC_h_beta_rate"/>
+            <forwardRate type="HHExpRate" rate="0.35per_ms" scale="-20mV" midpoint="-58mV"/>
+            <reverseRate type="HHSigmoidRate" rate="5per_ms" scale="10mV" midpoint="-28mV"/>
         </gate>
                             
     </ionChannel>
 
-    <ComponentType name="Na_BC_h_beta_rate" extends="baseVoltageDepRate">
-        <Constant name="TIME_SCALE" dimension="time" value="1 ms"/>
-        <Constant name="VOLT_SCALE" dimension="voltage" value="1 mV"/>
-
-        <Dynamics>
-            <DerivedVariable name="V" dimension="none" value="v / VOLT_SCALE"/>
-            <DerivedVariable name="r" exposure="r" dimension="per_time" value="(3/(1+ (exp ((V+17)/-5)))) / TIME_SCALE"/>
-        </Dynamics>
-
-    </ComponentType>
 
 </neuroml>
