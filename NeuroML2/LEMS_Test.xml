@@ -23,7 +23,7 @@
     <Simulation id="Test" length="400ms" step="0.025ms" target="BC_StimNet" seed="12345">  <!-- Note seed: ensures same random numbers used every run -->
         
         <Display id="DispPop__BC" title="Membrane potentials of cells in BC" timeScale="1ms" xmin="-40.0" xmax="440.0" ymin="-90" ymax="50">
-            <Line id="BC[0]: v" quantity="BC/0/BC2_na_k/v" scale="1mV" color="#3a650b" timeScale="1ms"/>
+            <Line id="BC[0]: v" quantity="BC/0/BC2_na_k/v" scale="1mV" color="#68cf0c" timeScale="1ms"/>
         </Display>
         
         <OutputFile id="Volts_file__BC" fileName="Test.BC.v.dat">
