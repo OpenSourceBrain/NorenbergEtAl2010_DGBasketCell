@@ -18,7 +18,7 @@
                 
 
         <gate id="m" type="gateHHInstantaneous" instances="3">
-            <steadyState type="HHSigmoidVariable" rate="1" scale="10mV" midpoint="-37mV"/>
+            <steadyState type="Na_BC_m_inf"/>
         </gate>
 
         <gate id="h" type="gateHHrates" instances="1">
@@ -28,6 +28,33 @@
         </gate>
                             
     </ionChannel>
+        
+    <ComponentType name="Na_BC_m_inf" extends="baseVoltageDepVariable">
+        <Constant name="TIME_SCALE" dimension="time" value="1 ms"/>
+        <Constant name="VOLT_SCALE" dimension="voltage" value="1 mV"/>
+        
+        <Constant name="Aalpha_m" dimension="none" value="0.1"/>
+        <Constant name="Kalpha_m" dimension="none" value="-10"/>
+        <Constant name="V0alpha_m" dimension="none" value="-35"/>
+        
+        <Constant name="Abeta_m" dimension="none" value="4"/>
+        <Constant name="Kbeta_m" dimension="none" value="-18"/>
+        <Constant name="V0beta_m" dimension="none" value="-60"/>
+
+        <Dynamics>
+            <DerivedVariable name="V" dimension="none" value="v / VOLT_SCALE"/>
+            
+            <DerivedVariable name="x_" dimension="none" value="V-V0alpha_m"/>
+            <DerivedVariable name="y_" dimension="none" value="Kalpha_m"/>
+            
+            <DerivedVariable name="alp_m" dimension="none" value="Aalpha_m * x_/(1 - exp(x_/y_))"/>
+            
+            <DerivedVariable name="bet_m" dimension="none" value="Abeta_m * exp((V-V0beta_m)/Kbeta_m)"/>
+            
+            <DerivedVariable name="x" exposure="x" dimension="none" value="alp_m/(alp_m + bet_m)"/>
+        </Dynamics>
+
+    </ComponentType>
 
 
 </neuroml>
