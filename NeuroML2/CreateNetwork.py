@@ -66,6 +66,15 @@ dt = 0.025
 lems_file_name = 'LEMS_%s.xml'%sim_id
 target_dir = "."
 
+interesting_seg_ids = [0,1000,2000,10000]
+
+to_plot = {'Some_voltages':[]}
+to_save = {'%s_voltages.dat'%cell_id:[]}
+
+for seg_id in interesting_seg_ids:
+    to_plot.values()[0].append('%s/0/%s/%s/v'%(pop.id, pop.component,seg_id))
+    to_save.values()[0].append('%s/0/%s/%s/v'%(pop.id, pop.component,seg_id))
+    
 generate_lems_file_for_neuroml(sim_id, 
                                nml_file, 
                                target, 
@@ -73,12 +82,12 @@ generate_lems_file_for_neuroml(sim_id,
                                dt, 
                                lems_file_name,
                                target_dir,
-                               gen_plots_for_all_v = True,
+                               gen_plots_for_all_v = False,
                                plot_all_segments = False,
-                               gen_plots_for_quantities = {},   #  Dict with displays vs lists of quantity paths
-                               gen_saves_for_all_v = True,
+                               gen_plots_for_quantities = to_plot,   #  Dict with displays vs lists of quantity paths
+                               gen_saves_for_all_v = False,
                                save_all_segments = False,
-                               gen_saves_for_quantities = {},   #  Dict with file names vs lists of quantity paths
+                               gen_saves_for_quantities = to_save,   #  Dict with file names vs lists of quantity paths
                                copy_neuroml = False)
 
 

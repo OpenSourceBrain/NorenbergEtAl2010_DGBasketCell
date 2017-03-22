@@ -22,12 +22,18 @@
    
     <Simulation id="Test" length="400ms" step="0.025ms" target="BC_StimNet" seed="12345">  <!-- Note seed: ensures same random numbers used every run -->
         
-        <Display id="DispPop__BC" title="Membrane potentials of cells in BC" timeScale="1ms" xmin="-40.0" xmax="440.0" ymin="-90" ymax="50">
-            <Line id="BC[0]: v" quantity="BC/0/BC2_na_k/v" scale="1mV" color="#68cf0c" timeScale="1ms"/>
+        <Display id="Some_voltages" title="Plots of Some_voltages" timeScale="1ms" xmin="-40.0" xmax="440.0" ymin="-90" ymax="50">
+            <Line id="BC_0_BC2_na_k_0_v" quantity="BC/0/BC2_na_k/0/v" scale="1" color="#b4c274" timeScale="1ms"/>
+            <Line id="BC_0_BC2_na_k_1000_v" quantity="BC/0/BC2_na_k/1000/v" scale="1" color="#2fe782" timeScale="1ms"/>
+            <Line id="BC_0_BC2_na_k_2000_v" quantity="BC/0/BC2_na_k/2000/v" scale="1" color="#c5862c" timeScale="1ms"/>
+            <Line id="BC_0_BC2_na_k_10000_v" quantity="BC/0/BC2_na_k/10000/v" scale="1" color="#4d72e4" timeScale="1ms"/>
         </Display>
         
-        <OutputFile id="Volts_file__BC" fileName="Test.BC.v.dat">
-            <OutputColumn id="v_BC_0_BC2_na_k_v" quantity="BC/0/BC2_na_k/v"/> 
+        <OutputFile id="BC2_na_k_voltages_dat" fileName="BC2_na_k_voltages.dat">
+            <OutputColumn id="BC_0_BC2_na_k_0_v" quantity="BC/0/BC2_na_k/0/v"/> 
+            <OutputColumn id="BC_0_BC2_na_k_1000_v" quantity="BC/0/BC2_na_k/1000/v"/> 
+            <OutputColumn id="BC_0_BC2_na_k_2000_v" quantity="BC/0/BC2_na_k/2000/v"/> 
+            <OutputColumn id="BC_0_BC2_na_k_10000_v" quantity="BC/0/BC2_na_k/10000/v"/> 
         </OutputFile>
         
     </Simulation>
