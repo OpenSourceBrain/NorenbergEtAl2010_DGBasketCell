@@ -12,6 +12,9 @@ cell = doc.cells[0]
 axon_seg_group = neuroml.SegmentGroup(id="axon_group",neuro_lex_id="GO:0030424")  # See http://amigo.geneontology.org/amigo/term/GO:0030424
 soma_seg_group = neuroml.SegmentGroup(id="soma_group",neuro_lex_id="GO:0043025")
 dend_seg_group = neuroml.SegmentGroup(id="dendrite_group",neuro_lex_id="GO:0030425")
+inhomogeneous_parameter = neuroml.InhomogeneousParameter(id="PathLengthOverDendrites",variable="p",metric="Path Length from root")
+dend_seg_group.inhomogeneous_parameters.append(inhomogeneous_parameter)
+
 apic_dend_seg_group = neuroml.SegmentGroup(id="apic_dendrite_group")
 
 included_sections = []
@@ -39,6 +42,7 @@ cell.morphology.segment_groups.append(dend_seg_group)
 cell.morphology.segment_groups.append(apic_dend_seg_group)
 
 channel_densities = []
+channel_density_non_uniforms = []
 
 cd_pas = neuroml.ChannelDensity(id="pas_chan", segment_groups="all", ion="non_specific", ion_channel="pas", erev="-70.0 mV", cond_density="0.021 mS_per_cm2")
 channel_densities.append(cd_pas)
@@ -46,8 +50,12 @@ channel_densities.append(cd_pas)
 cd_na = neuroml.ChannelDensity(id="na_chan_soma", segment_groups=soma_seg_group.id, ion="na", ion_channel="Na_BC", erev="55 mV", cond_density="150 mS_per_cm2")
 channel_densities.append(cd_na)
 
-cd_na = neuroml.ChannelDensity(id="na_chan_dend", segment_groups=dend_seg_group.id, ion="na", ion_channel="Na_BC", erev="55 mV", cond_density="30 mS_per_cm2")
-channel_densities.append(cd_na)
+
+cdnu_na = neuroml.ChannelDensityNonUniform(id="na_dendrite_group", ion="na", ion_channel="Na_BC", erev="55 mV")
+vp = neuroml.VariableParameter(parameter="condDensity", segment_groups=dend_seg_group.id)
+cdnu_na.variable_parameters.append(vp)
+vp.inhomogeneous_value = neuroml.InhomogeneousValue(inhomogeneous_parameters="PathLengthOverDendrites",value="700 * (H(120-p))") # SI units!!
+channel_density_non_uniforms.append(cdnu_na)
 
 cd_na = neuroml.ChannelDensity(id="na_chan_axon", segment_groups=axon_seg_group.id, ion="na", ion_channel="Na_BC", erev="55 mV", cond_density="30 mS_per_cm2")
 channel_densities.append(cd_na)
@@ -66,6 +74,7 @@ init_memb_potentials = [neuroml.InitMembPotential(
 
 membrane_properties = neuroml.MembraneProperties(
     channel_densities=channel_densities,
+    channel_density_non_uniforms = channel_density_non_uniforms,
     specific_capacitances=specific_capacitances,
     init_memb_potentials=init_memb_potentials)
 
