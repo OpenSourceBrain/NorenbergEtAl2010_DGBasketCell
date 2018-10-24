@@ -2,7 +2,7 @@
     
     <!-- 
 
-        This LEMS file has been automatically generated using PyNeuroML v0.2.9 (libNeuroML v0.2.29)
+        This LEMS file has been automatically generated using PyNeuroML v0.3.14 (libNeuroML v0.2.45)
 
      -->
     
@@ -22,11 +22,11 @@
    
     <Simulation id="Test" length="400ms" step="0.025ms" target="BC_StimNet" seed="12345">  <!-- Note seed: ensures same random numbers used every run -->
         
-        <Display id="Some_voltages" title="Plots of Some_voltages" timeScale="1ms" xmin="-40.0" xmax="440.0" ymin="-90" ymax="50">
-            <Line id="BC_0_BC2_na_k_0_v" quantity="BC/0/BC2_na_k/0/v" scale="1" color="#459b77" timeScale="1ms"/>
-            <Line id="BC_0_BC2_na_k_1000_v" quantity="BC/0/BC2_na_k/1000/v" scale="1" color="#b0a5ca" timeScale="1ms"/>
-            <Line id="BC_0_BC2_na_k_2000_v" quantity="BC/0/BC2_na_k/2000/v" scale="1" color="#11333e" timeScale="1ms"/>
-            <Line id="BC_0_BC2_na_k_10000_v" quantity="BC/0/BC2_na_k/10000/v" scale="1" color="#bdb2f8" timeScale="1ms"/>
+        <Display id="Some_voltages" title="Plots of Some_voltages" timeScale="1ms" xmin="-40.0" xmax="440.0" ymin="-80" ymax="40">
+            <Line id="BC_0_BC2_na_k_0_v" quantity="BC/0/BC2_na_k/0/v" scale="1mV" color="#6aa799" timeScale="1ms"/>
+            <Line id="BC_0_BC2_na_k_1000_v" quantity="BC/0/BC2_na_k/1000/v" scale="1mV" color="#029a72" timeScale="1ms"/>
+            <Line id="BC_0_BC2_na_k_2000_v" quantity="BC/0/BC2_na_k/2000/v" scale="1mV" color="#d340bb" timeScale="1ms"/>
+            <Line id="BC_0_BC2_na_k_10000_v" quantity="BC/0/BC2_na_k/10000/v" scale="1mV" color="#4c73a9" timeScale="1ms"/>
         </Display>
         
         <OutputFile id="BC2_na_k_voltages_dat" fileName="BC2_na_k_voltages.dat">

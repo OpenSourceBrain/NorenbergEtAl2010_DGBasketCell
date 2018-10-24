@@ -4,4 +4,8 @@ Passive cable model of Dentate Gyrus Basket Cells from: *Distinct nonuniform cab
 
 **Work in progress!**
 
+Model is being [converted to NeuroML2](NeuroML2).
+
 ![](https://github.com/OpenSourceBrain/NorenbergEtAl2010_DGBasketCell/raw/master/NeuroML2/images/BC2.png)
+
+[![Build Status](https://travis-ci.org/OpenSourceBrain/NorenbergEtAl2010_DGBasketCell.svg?branch=master)](https://travis-ci.org/OpenSourceBrain/NorenbergEtAl2010_DGBasketCell)
