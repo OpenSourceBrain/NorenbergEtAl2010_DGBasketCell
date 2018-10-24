@@ -1,0 +1,4 @@
+load_file("nrngui.hoc")
+
+load_file("../NEURON/NEURON-models/DG-BasketCell1.hoc")
+define_shape()

@@ -5,7 +5,6 @@
 /neuroConstruct/morphologies/*.bak
 /neuroConstruct/simulations
 /neuroConstruct/generated*
-/NeuroML2/*.hoc
 /NeuroML2/*_nrn.py
 /NeuroML2/*.dat
 /NeuroML2/*.mod
@@ -14,3 +13,5 @@
 /NeuroML2/channelConvert/*.dat
 /NeuroML2/channelConvert/LEMS_Test_*.xml
 /NeuroML1/tests.log
+/NeuroML2/BC2_na_k.hoc
+/NeuroML2/BC1_na_k.hoc

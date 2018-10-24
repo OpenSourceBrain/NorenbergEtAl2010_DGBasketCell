@@ -1,8 +1,12 @@
 ## NeuroML 2 version of model
 
-To recreate NeuroML files (install [libNeuroML](https://github.com/NeuralEnsemble/libNeuroML) first):
+To recreate NeuroML files (install [libNeuroML](https://github.com/NeuralEnsemble/libNeuroML)):
 
-     # Exports cell model from NEURON & writes *.cell.nml
+     # Exports cell model(s) from NEURON & writes *.cell.nml with only morphologies
+     python export_nml2.py   
+
+     # Creates *.cell.nml containing info on segment groups (axons/dends/soma) and 
+     # conductance densities for ion channels
      python CreateCellModel.py   
 
      # Generates a NeuroML network file (*net.nml) using the above cell and a current 
