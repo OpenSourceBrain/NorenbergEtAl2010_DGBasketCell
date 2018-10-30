@@ -120,3 +120,4 @@ if __name__ == "__main__":
     
     load_and_rewrite_cell('BC1')
     load_and_rewrite_cell('BC2')
+    load_and_rewrite_cell('BC6')

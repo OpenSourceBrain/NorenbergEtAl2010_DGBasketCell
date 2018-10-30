@@ -98,3 +98,4 @@ if __name__ == "__main__":
     
     create_network_for_cell('BC1')
     create_network_for_cell('BC2')
+    create_network_for_cell('BC6')
