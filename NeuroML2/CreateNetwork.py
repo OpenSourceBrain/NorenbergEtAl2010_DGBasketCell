@@ -75,8 +75,8 @@ def create_network_for_cell(cell_ref):
     to_save = {'%s_voltages.dat'%cell_id:[]}
 
     for seg_id in interesting_seg_ids:
-        to_plot.values()[0].append('%s/0/%s/%s/v'%(pop.id, pop.component,seg_id))
-        to_save.values()[0].append('%s/0/%s/%s/v'%(pop.id, pop.component,seg_id))
+        to_plot['Some_voltages'].append('%s/0/%s/%s/v'%(pop.id, pop.component,seg_id))
+        to_save['%s_voltages.dat'%cell_id].append('%s/0/%s/%s/v'%(pop.id, pop.component,seg_id))
 
     generate_lems_file_for_neuroml(sim_id, 
                                    nml_file, 

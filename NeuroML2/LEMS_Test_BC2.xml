@@ -1,11 +1,11 @@
 <Lems>
-    
+
     <!-- 
 
-        This LEMS file has been automatically generated using PyNeuroML v0.3.14 (libNeuroML v0.2.45)
+        This LEMS file has been automatically generated using PyNeuroML v1.2.12 (libNeuroML v0.5.9)
 
      -->
-    
+
     <!-- Specify which component to run -->
     <Target component="Test"/>
 
@@ -13,29 +13,28 @@
     <Include file="Cells.xml"/>
     <Include file="Networks.xml"/>
     <Include file="Simulation.xml"/>
-    
+
     <Include file="BC2_StimNet.net.nml"/>
     <Include file="BC2_na_k.cell.nml"/>
     <Include file="pas.channel.nml"/>
     <Include file="channelConvert/Na_BC.channel.nml"/>
     <Include file="channelConvert/K_BC.channel.nml"/>
-   
-    <Simulation id="Test" length="400ms" step="0.025ms" target="BC2_StimNet" seed="12345">  <!-- Note seed: ensures same random numbers used every run -->
-        
-        <Display id="Some_voltages" title="Plots of Some_voltages" timeScale="1ms" xmin="-40.0" xmax="440.0" ymin="-80" ymax="40">
-            <Line id="BC_0_BC2_na_k_0_v" quantity="BC/0/BC2_na_k/0/v" scale="1mV" color="#6aa799" timeScale="1ms"/>
-            <Line id="BC_0_BC2_na_k_1000_v" quantity="BC/0/BC2_na_k/1000/v" scale="1mV" color="#029a72" timeScale="1ms"/>
-            <Line id="BC_0_BC2_na_k_2000_v" quantity="BC/0/BC2_na_k/2000/v" scale="1mV" color="#d340bb" timeScale="1ms"/>
-            <Line id="BC_0_BC2_na_k_10000_v" quantity="BC/0/BC2_na_k/10000/v" scale="1mV" color="#4c73a9" timeScale="1ms"/>
+
+    <Simulation id="Test" length="400.0ms" step="0.025ms" target="BC2_StimNet" seed="12345">  <!-- Note seed: ensures same random numbers used every run -->
+        <Display id="Some_voltages" title="Plots of Some_voltages" timeScale="1ms" xmin="-40.0" xmax="440.00000000000006" ymin="-80" ymax="40">
+            <Line id="BC_0_BC2_na_k_0_v" quantity="BC/0/BC2_na_k/0/v" scale="1mV" color="#d54f33" timeScale="1ms"/>
+            <Line id="BC_0_BC2_na_k_1000_v" quantity="BC/0/BC2_na_k/1000/v" scale="1mV" color="#0534e4" timeScale="1ms"/>
+            <Line id="BC_0_BC2_na_k_2000_v" quantity="BC/0/BC2_na_k/2000/v" scale="1mV" color="#98e752" timeScale="1ms"/>
+            <Line id="BC_0_BC2_na_k_10000_v" quantity="BC/0/BC2_na_k/10000/v" scale="1mV" color="#bca074" timeScale="1ms"/>
         </Display>
-        
+
         <OutputFile id="BC2_na_k_voltages_dat" fileName="BC2_na_k_voltages.dat">
-            <OutputColumn id="BC_0_BC2_na_k_0_v" quantity="BC/0/BC2_na_k/0/v"/> 
-            <OutputColumn id="BC_0_BC2_na_k_1000_v" quantity="BC/0/BC2_na_k/1000/v"/> 
-            <OutputColumn id="BC_0_BC2_na_k_2000_v" quantity="BC/0/BC2_na_k/2000/v"/> 
-            <OutputColumn id="BC_0_BC2_na_k_10000_v" quantity="BC/0/BC2_na_k/10000/v"/> 
+            <OutputColumn id="BC_0_BC2_na_k_0_v" quantity="BC/0/BC2_na_k/0/v"/>
+            <OutputColumn id="BC_0_BC2_na_k_1000_v" quantity="BC/0/BC2_na_k/1000/v"/>
+            <OutputColumn id="BC_0_BC2_na_k_2000_v" quantity="BC/0/BC2_na_k/2000/v"/>
+            <OutputColumn id="BC_0_BC2_na_k_10000_v" quantity="BC/0/BC2_na_k/10000/v"/>
         </OutputFile>
-        
+
     </Simulation>
 
 </Lems>
