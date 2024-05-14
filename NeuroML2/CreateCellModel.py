@@ -74,11 +74,16 @@ def load_and_rewrite_cell(cell_ref):
     init_memb_potentials = [neuroml.InitMembPotential(
         value="-80 mV", segment_groups='all')]
 
+    # 10mV is default for Neuron spike threshold in NetCon
+    # https://www.neuron.yale.edu/neuron/static/py_doc/modelspec/programmatic/network/netcon.html
+    spike_threshes = [neuroml.SpikeThresh(value="10mV", segment_groups='all')]
+
     membrane_properties = neuroml.MembraneProperties(
         channel_densities=channel_densities,
         channel_density_non_uniforms = channel_density_non_uniforms,
         specific_capacitances=specific_capacitances,
-        init_memb_potentials=init_memb_potentials)
+        init_memb_potentials=init_memb_potentials,
+        spike_threshes=spike_threshes)
 
     # Intracellular Properties
     #
@@ -107,7 +112,7 @@ def load_and_rewrite_cell(cell_ref):
 
     writers.NeuroMLWriter.write(nml_doc2,nml_file)
 
-    print("Saved modified morphology file to: "+nml_file)
+    print("Saved the modified morphology file to: "+nml_file)
 
 
     ###### Validate the NeuroML ######    
